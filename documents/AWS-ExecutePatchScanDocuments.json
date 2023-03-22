@@ -1,0 +1,71 @@
+{
+    "schemaVersion": "0.3",
+    "description": "**This Runbook is the parent document that executes two child documents that update both tomcat and apache AMIs. There are 4 mainte steps to this document:\n 1. Create a CloudFormation Stack to build VPC Endpoints that will enable Systems Manager to communicate with the temporary instances in a private subnet.\n 2. Execute the Runbook to patch and update the tomcat AMI.\n 3. Execute the Runbook to patch and update the apache AMI.\n 4. Delete the CloudFormation stack to remove the VPC Endpoints.",
+    "parameters": {
+        "AutomationAssumeRole": {
+            "type": "String",
+            "description": "(Required) The ARN of the role that allows Automation to perform the actions on your behalf.",
+            "default": "arn:aws:iam::{{global:ACCOUNT_ID}}:role/ssmAutomationDocumentExecutionRole"
+        },
+        "vpcEndpointTemplateURL": {
+            "type": "String",
+            "description": "URL for the CloudFormation Template that creates VPC Endpoints to reach the instance in a private subnet",
+            "default": "{{ssm:/amiPatching/config/vpcEndpointTemplateUrl}}"
+        },
+        "tomcatDocumentName": {
+            "type": "String",
+            "description": "SSM Parameter Store location that contains the name of the Tomcat Automation Document",
+            "default": "{{ssm:/amiPatching/compliance/tomcatPatchScanAutomationDocumentName}}"
+        },
+        "apacheDocumentName": {
+            "type": "String",
+            "description": "SSM Parameter Store location that contains the name of the Tomcat Automation Document",
+            "default": "{{ssm:/amiPatching/compliance/apachePatchScanAutomationDocumentName}}"
+        }
+    },
+    "mainSteps": [
+        {
+            "name": "createVPCEndpointStack",
+            "action": "aws:createStack",
+            "maxAttempts": 1,
+            "onFailure": "Abort",
+            "inputs": {
+                "Capabilities": [
+                    "CAPABILITY_AUTO_EXPAND"
+                ],
+                "StackName": "vpcEndpointCreationForAMIPatching",
+                "TemplateURL": "{{vpcEndpointTemplateURL}}",
+                "TimeoutInMinutes": 20
+            }
+        },
+        {
+            "name": "executeTomcatPatchScanAutomation",
+            "action": "aws:executeAutomation",
+            "maxAttempts": 1,
+            "timeoutSeconds": 3600,
+            "onFailure": "Abort",
+            "inputs": {
+                "DocumentName": "{{tomcatDocumentName}}"
+            }
+        },
+        {
+            "name": "executeApachePatchScanAutomation",
+            "action": "aws:executeAutomation",
+            "maxAttempts": 1,
+            "timeoutSeconds": 3600,
+            "onFailure": "Abort",
+            "inputs": {
+                "DocumentName": "{{apacheDocumentName}}"
+            }
+        },
+        {
+            "name": "terminateVPCEndpoints",
+            "action": "aws:deleteStack",
+            "maxAttempts": 1,
+            "onFailure": "Abort",
+            "inputs": {
+              "StackName": "vpcEndpointCreationForAMIPatching"
+            }
+          }
+    ]
+}

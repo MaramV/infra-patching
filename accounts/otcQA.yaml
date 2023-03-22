@@ -1,0 +1,48 @@
+# Account Information
+accountId: '246338920281' # Ex: 1234567890
+region: 'us-west-2' # Ex: us-west-2
+code: 'otc' # Ex: otc
+vpcId: 'vpc-0499ba716963cbda8' # Ex: vpc-01as8d7fa321af621
+subnetId: 'subnet-0880fabf6df287984' #Ex: subnet-09182kjhjk12s8gkjb
+subnetCidrBlock: '10.241.132.0/24' # Ex: 10.11.3.0/24
+s3GatewayPrefixListId: 'pl-68a54001' # Ex: pl-68a64290
+
+
+# Automation Document Naming
+automationExecutionDocumentName: 'executeAmiPatchScanDocuments'
+tomcatPatchScanAutomationDocumentName: 'tomcatScanForPatches'
+apachePatchScanAutomationDocumentName: 'apacheScanForPatches'
+
+
+# IAM Information
+automationDocumentIamRoleName: 'ssmAutomationDocumentExecutionRole'
+maintenanceWindowIamRoleName: 'amiPatchingServiceRole'
+
+
+# Maintenance Window Information
+scanForPatchesMaintenanceWindowName: 'scanAmisForPatches'
+scanForPatchesWindowCronSchedule: 'cron(0 30 20 ? * * *)' # Everyday at 2:30 AM, converted to UTC
+scanForDeprecatedInstancesMaintenanceWindowName: 'scanForDeprecatedInstancesWindow'
+scanForDeprecatedInstancesCronSchedule: 'cron(0 30 00 ? * * *)' # Everyday at 6:30 AM, converted to UTC
+
+
+# Remove Deprecated AMIs Lambda Information
+removeDeprecatedAmisFunctionName: 'SSMremoveDeprecatedAmis'
+removeDeprecatedAmisMaintenanceWindowName: 'removeDeprecatedAmisWindow'
+removeDeprecatedAmisFunctionTagKey: 'tag:amiType'
+removeDeprecatedAmisFunctionTomcatTagValue: 'tomcat'
+removeDeprecatedAmisFunctionApacheTagValue: 'apache'
+removeDeprecatedAmisFunctionDeletionTagKey: 'tag:markedForDeletion'
+removeDeprecatedAmisFunctionDeletionTagValue: 'true'
+removeDeprecatedAmisCronSchedule: 'cron(0 30 06 ? * * *)' # Everyday at 12:30 PM, converted to UTC
+<<<<<<< Updated upstream
+lambdaSDKLayerVersionArn: 'arn:aws:lambda:us-west-2:246338920281:layer:sdkV3Layer:1' # REQUIRED: Replace {ACCOUNT-NUMBER} with account number you're deploying to.
+=======
+lambdaSDKLayerVersionArn: 'arn:aws:lambda:us-west-2:246338920281:layer:sdkV3Layer:3' # REQUIRED: Replace {ACCOUNT-NUMBER} with account number you're deploying to.
+>>>>>>> Stashed changes
+
+# Build Deprecated Instance Report
+deprecatedInstanceFunctionName: 'SSMbuildDeprecatedInstancesReport' # MUST include 'SSM' at the beginning of Lambda Function.
+deprecatedInstanceFunctionFilterName: 'instance.group-name'
+deprecatedInstanceFunctionTomcatFilterValue: 'tomcat-test-sg'
+deprecatedInstanceFunctionApacheFilterValue: 'apache-test-sg'

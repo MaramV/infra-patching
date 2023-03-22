@@ -1,0 +1,190 @@
+{
+  "version": "20.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "AmiPatchingComplianceStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "AmiPatchingComplianceStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "AmiPatchingComplianceStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://667975846098/us-west-2",
+      "properties": {
+        "templateFile": "AmiPatchingComplianceStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::667975846098:role/cdk-hnb659fds-deploy-role-667975846098-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::667975846098:role/cdk-hnb659fds-cfn-exec-role-667975846098-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-667975846098-us-west-2/597dfe0180d0b864a86b43545f19f5d98570e0f9809acdec2a7dce98e94f85ac.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "AmiPatchingComplianceStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::667975846098:role/cdk-hnb659fds-lookup-role-667975846098-us-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "AmiPatchingComplianceStack.assets"
+      ],
+      "metadata": {
+        "/AmiPatchingComplianceStack/lambdaExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "lambdaExecutionRole957698A4"
+          }
+        ],
+        "/AmiPatchingComplianceStack/SsmParameterValue:--amiPatching--config--s3BucketName:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SsmParameterValueamiPatchingconfigs3BucketNameC96584B6F00A464EAD1953AFF4B05118Parameter"
+          }
+        ],
+        "/AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "buildDeprecatedInstancesLambda787B07A5"
+          }
+        ],
+        "/AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "buildDeprecatedInstancesLambdaLogRetention827E934F"
+          }
+        ],
+        "/AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+          }
+        ],
+        "/AmiPatchingComplianceStack/removeDeprecatedAmisLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "removeDeprecatedAmisLambdaA0D7D581"
+          }
+        ],
+        "/AmiPatchingComplianceStack/removeDeprecatedAmisLambda/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "removeDeprecatedAmisLambdaLogRetentionA2754991"
+          }
+        ],
+        "/AmiPatchingComplianceStack/tomcatPatchScanDocumentNameParameter/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tomcatPatchScanDocumentNameParameterBDD3DCC5"
+          }
+        ],
+        "/AmiPatchingComplianceStack/apachePatchScanDocumentNameParameter/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apachePatchScanDocumentNameParameter9BB18223"
+          }
+        ],
+        "/AmiPatchingComplianceStack/patchScanParentDocument": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "patchScanParentDocument"
+          }
+        ],
+        "/AmiPatchingComplianceStack/tomcatScanForPatchesDocument": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tomcatScanForPatchesDocument"
+          }
+        ],
+        "/AmiPatchingComplianceStack/apacheScanForPatchesDocument": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apacheScanForPatchesDocument"
+          }
+        ],
+        "/AmiPatchingComplianceStack/scanForPatchesMaintenanceWindow": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "scanForPatchesMaintenanceWindow"
+          }
+        ],
+        "/AmiPatchingComplianceStack/SsmParameterValue:--amiPatching--config--automationDocumentExecutionIamRoleArn:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SsmParameterValueamiPatchingconfigautomationDocumentExecutionIamRoleArnC96584B6F00A464EAD1953AFF4B05118Parameter"
+          }
+        ],
+        "/AmiPatchingComplianceStack/maintenanceWindowTask": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "maintenanceWindowTask"
+          }
+        ],
+        "/AmiPatchingComplianceStack/deprecatedInstanceScanMaintenanceWindow": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "deprecatedInstanceScanMaintenanceWindow"
+          }
+        ],
+        "/AmiPatchingComplianceStack/deprecatedInstanceMaintenanceWindowTask": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "deprecatedInstanceMaintenanceWindowTask"
+          }
+        ],
+        "/AmiPatchingComplianceStack/removeDeprecatedAmisMaintenanceWindow": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "removeDeprecatedAmisMaintenanceWindow"
+          }
+        ],
+        "/AmiPatchingComplianceStack/removeDeprecatedAMIsMaintenanceWindowTask": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "removeDeprecatedAMIsMaintenanceWindowTask"
+          }
+        ],
+        "/AmiPatchingComplianceStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/AmiPatchingComplianceStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/AmiPatchingComplianceStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "AmiPatchingComplianceStack"
+    }
+  }
+}

@@ -1,0 +1,1103 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.64"
+        }
+      },
+      "AmiPatchingComplianceStack": {
+        "id": "AmiPatchingComplianceStack",
+        "path": "AmiPatchingComplianceStack",
+        "children": {
+          "lambdaExecutionRole": {
+            "id": "lambdaExecutionRole",
+            "path": "AmiPatchingComplianceStack/lambdaExecutionRole",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AmiPatchingComplianceStack/lambdaExecutionRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": [
+                              "lambda.amazonaws.com",
+                              "ssm.amazonaws.com"
+                            ]
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "description": "This role is assumed by the buildDeprecatedInstances report to generate a report of all tomcat and apache instances using an outdated AMI",
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/service-role/AmazonSSMMaintenanceWindowRole"
+                          ]
+                        ]
+                      }
+                    ],
+                    "policies": [
+                      {
+                        "policyName": "lambdaExecutionRolePolicy",
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "logs:CreateLogGroup",
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:logs:us-west-2:667975846098:*"
+                            },
+                            {
+                              "Action": [
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:logs:us-west-2:667975846098:log-group:/aws/lambda/*"
+                            },
+                            {
+                              "Action": "s3:PutObject",
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:s3:::667975846098-otc-ami-patching-templates-and-reports/*"
+                            },
+                            {
+                              "Action": [
+                                "ec2:DeleteSnapshot",
+                                "ec2:DeregisterImage",
+                                "ec2:DescribeImageAttribute",
+                                "ec2:DescribeImages",
+                                "ec2:DescribeInstanceAttribute",
+                                "ec2:DescribeInstances",
+                                "ssm:DescribeParameters",
+                                "ssm:GetParameter",
+                                "ssm:GetParameters"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    ],
+                    "roleName": "amiPatchingComplianceLambdaRole"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.34.2"
+            }
+          },
+          "SsmParameterValue:--amiPatching--config--s3BucketName:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": {
+            "id": "SsmParameterValue:--amiPatching--config--s3BucketName:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter",
+            "path": "AmiPatchingComplianceStack/SsmParameterValue:--amiPatching--config--s3BucketName:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.34.2"
+            }
+          },
+          "SsmParameterValue:--amiPatching--config--s3BucketName:C96584B6-F00A-464E-AD19-53AFF4B05118": {
+            "id": "SsmParameterValue:--amiPatching--config--s3BucketName:C96584B6-F00A-464E-AD19-53AFF4B05118",
+            "path": "AmiPatchingComplianceStack/SsmParameterValue:--amiPatching--config--s3BucketName:C96584B6-F00A-464E-AD19-53AFF4B05118",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.34.2"
+            }
+          },
+          "buildDeprecatedInstancesReportSdkLayer": {
+            "id": "buildDeprecatedInstancesReportSdkLayer",
+            "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesReportSdkLayer",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.34.2"
+            }
+          },
+          "buildDeprecatedInstancesLambda": {
+            "id": "buildDeprecatedInstancesLambda",
+            "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.34.2"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-667975846098-us-west-2",
+                      "s3Key": "79590491391164746fa383c988cfeb2441ef467cf7879f0ed39bab4bf2a90782.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "lambdaExecutionRole957698A4",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "s3Bucket": {
+                          "Ref": "SsmParameterValueamiPatchingconfigs3BucketNameC96584B6F00A464EAD1953AFF4B05118Parameter"
+                        },
+                        "filterName": "instance.group-name",
+                        "tomcatFilterValue": "tomcat-test-sg",
+                        "apacheFilterValue": "apache-test-sg"
+                      }
+                    },
+                    "functionName": "SSMbuildDeprecatedInstancesReport",
+                    "handler": "buildDeprecatedInstancesReport.handler",
+                    "layers": [
+                      "arn:aws:lambda:us-west-2:667975846098:layer:sdkV3Layer:1"
+                    ],
+                    "runtime": "nodejs16.x",
+                    "timeout": 90
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.34.2"
+                }
+              },
+              "LogRetention": {
+                "id": "LogRetention",
+                "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/LogRetention",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/LogRetention/Resource",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.LogRetention",
+                  "version": "2.34.2"
+                }
+              },
+              "LogGroup": {
+                "id": "LogGroup",
+                "path": "AmiPatchingComplianceStack/buildDeprecatedInstancesLambda/LogGroup",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.34.2"
+            }
+          },
+          "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a": {
+            "id": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+            "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.34.2"
+                }
+              },
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "logs:DeleteRetentionPolicy",
+                                    "logs:PutRetentionPolicy"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+                            "roles": [
+                              {
+                                "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.34.2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.34.2"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "AmiPatchingComplianceStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.64"
+            }
+          },
+          "removeDeprecatedInstancesSdkLayer": {
+            "id": "removeDeprecatedInstancesSdkLayer",
+            "path": "AmiPatchingComplianceStack/removeDeprecatedInstancesSdkLayer",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.34.2"
+            }
+          },
+          "removeDeprecatedAmisLambda": {
+            "id": "removeDeprecatedAmisLambda",
+            "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.34.2"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-667975846098-us-west-2",
+                      "s3Key": "d404c90e85e550d08e5474043d6baed4468c57a5f3459345aa329f5c7be954cd.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "lambdaExecutionRole957698A4",
+                        "Arn"
+                      ]
+                    },
+                    "environment": {
+                      "variables": {
+                        "s3Bucket": {
+                          "Ref": "SsmParameterValueamiPatchingconfigs3BucketNameC96584B6F00A464EAD1953AFF4B05118Parameter"
+                        },
+                        "tagKey": "tag:amiType",
+                        "tomcatTagValue": "tomcat",
+                        "apacheTagValue": "apache",
+                        "deleteAmiTagKey": "tag:markedForDeletion",
+                        "deleteAmiTagValue": "true"
+                      }
+                    },
+                    "functionName": "SSMremoveDeprecatedAmis",
+                    "handler": "removeDeprecatedAMIs.handler",
+                    "layers": [
+                      "arn:aws:lambda:us-west-2:667975846098:layer:sdkV3Layer:1"
+                    ],
+                    "runtime": "nodejs16.x",
+                    "timeout": 90
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.34.2"
+                }
+              },
+              "LogRetention": {
+                "id": "LogRetention",
+                "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda/LogRetention",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda/LogRetention/Resource",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.LogRetention",
+                  "version": "2.34.2"
+                }
+              },
+              "LogGroup": {
+                "id": "LogGroup",
+                "path": "AmiPatchingComplianceStack/removeDeprecatedAmisLambda/LogGroup",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.34.2"
+            }
+          },
+          "tomcatPatchScanDocumentNameParameter": {
+            "id": "tomcatPatchScanDocumentNameParameter",
+            "path": "AmiPatchingComplianceStack/tomcatPatchScanDocumentNameParameter",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AmiPatchingComplianceStack/tomcatPatchScanDocumentNameParameter/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
+                  "aws:cdk:cloudformation:props": {
+                    "type": "String",
+                    "value": "tomcatScanForPatches",
+                    "name": "/amiPatching/compliance/tomcatPatchScanAutomationDocumentName"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
+              "version": "2.34.2"
+            }
+          },
+          "apachePatchScanDocumentNameParameter": {
+            "id": "apachePatchScanDocumentNameParameter",
+            "path": "AmiPatchingComplianceStack/apachePatchScanDocumentNameParameter",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "AmiPatchingComplianceStack/apachePatchScanDocumentNameParameter/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
+                  "aws:cdk:cloudformation:props": {
+                    "type": "String",
+                    "value": "apacheScanForPatches",
+                    "name": "/amiPatching/compliance/apachePatchScanAutomationDocumentName"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
+              "version": "2.34.2"
+            }
+          },
+          "patchScanParentDocument": {
+            "id": "patchScanParentDocument",
+            "path": "AmiPatchingComplianceStack/patchScanParentDocument",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::Document",
+              "aws:cdk:cloudformation:props": {
+                "content": {
+                  "schemaVersion": "0.3",
+                  "description": "**This Runbook is the parent document that executes two child documents that update both tomcat and apache AMIs. There are 4 mainte steps to this document:\n 1. Create a CloudFormation Stack to build VPC Endpoints that will enable Systems Manager to communicate with the temporary instances in a private subnet.\n 2. Execute the Runbook to patch and update the tomcat AMI.\n 3. Execute the Runbook to patch and update the apache AMI.\n 4. Delete the CloudFormation stack to remove the VPC Endpoints.",
+                  "parameters": {
+                    "AutomationAssumeRole": {
+                      "type": "String",
+                      "description": "(Required) The ARN of the role that allows Automation to perform the actions on your behalf.",
+                      "default": "arn:aws:iam::{{global:ACCOUNT_ID}}:role/ssmAutomationDocumentExecutionRole"
+                    },
+                    "vpcEndpointTemplateURL": {
+                      "type": "String",
+                      "description": "URL for the CloudFormation Template that creates VPC Endpoints to reach the instance in a private subnet",
+                      "default": "{{ssm:/amiPatching/config/vpcEndpointTemplateUrl}}"
+                    },
+                    "tomcatDocumentName": {
+                      "type": "String",
+                      "description": "SSM Parameter Store location that contains the name of the Tomcat Automation Document",
+                      "default": "{{ssm:/amiPatching/compliance/tomcatPatchScanAutomationDocumentName}}"
+                    },
+                    "apacheDocumentName": {
+                      "type": "String",
+                      "description": "SSM Parameter Store location that contains the name of the Tomcat Automation Document",
+                      "default": "{{ssm:/amiPatching/compliance/apachePatchScanAutomationDocumentName}}"
+                    }
+                  },
+                  "mainSteps": [
+                    {
+                      "name": "createVPCEndpointStack",
+                      "action": "aws:createStack",
+                      "maxAttempts": 1,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "Capabilities": [
+                          "CAPABILITY_AUTO_EXPAND"
+                        ],
+                        "StackName": "vpcEndpointCreationForAMIPatching",
+                        "TemplateURL": "{{vpcEndpointTemplateURL}}",
+                        "TimeoutInMinutes": 20
+                      }
+                    },
+                    {
+                      "name": "executeTomcatPatchScanAutomation",
+                      "action": "aws:executeAutomation",
+                      "maxAttempts": 1,
+                      "timeoutSeconds": 3600,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "DocumentName": "{{tomcatDocumentName}}"
+                      }
+                    },
+                    {
+                      "name": "executeApachePatchScanAutomation",
+                      "action": "aws:executeAutomation",
+                      "maxAttempts": 1,
+                      "timeoutSeconds": 3600,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "DocumentName": "{{apacheDocumentName}}"
+                      }
+                    },
+                    {
+                      "name": "terminateVPCEndpoints",
+                      "action": "aws:deleteStack",
+                      "maxAttempts": 1,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "StackName": "vpcEndpointCreationForAMIPatching"
+                      }
+                    }
+                  ]
+                },
+                "documentType": "Automation",
+                "name": "executeAmiPatchScanDocuments"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnDocument",
+              "version": "2.34.2"
+            }
+          },
+          "tomcatScanForPatchesDocument": {
+            "id": "tomcatScanForPatchesDocument",
+            "path": "AmiPatchingComplianceStack/tomcatScanForPatchesDocument",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::Document",
+              "aws:cdk:cloudformation:props": {
+                "content": {
+                  "schemaVersion": "0.3",
+                  "description": "Updates AMI with Linux distribution packages and Amazon software. For details,see https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-awsdocs-linux.html",
+                  "assumeRole": "{{AutomationAssumeRole}}",
+                  "parameters": {
+                    "SourceAmiId": {
+                      "type": "String",
+                      "default": "{{ssm:/amiPatching/tomcat/tomcatAmiId}}",
+                      "description": "(Required) The source Amazon Machine Image ID."
+                    },
+                    "IamInstanceProfileName": {
+                      "type": "String",
+                      "description": "(Required) The instance profile that enables Systems Manager (SSM) to manage the instance.",
+                      "default": "{{ssm:/amiPatching/config/ec2InstanceProfileRole}}"
+                    },
+                    "AutomationAssumeRole": {
+                      "type": "String",
+                      "description": "(Required) The ARN of the role that allows Automation to perform the actions on your behalf.",
+                      "default": "arn:aws:iam::{{global:ACCOUNT_ID}}:role/ssmAutomationDocumentExecutionRole"
+                    },
+                    "InstanceType": {
+                      "type": "String",
+                      "description": "(Optional) Type of instance to launch as the workspace host. Instance types vary by region. Default is t3.micro.",
+                      "default": "t3.micro"
+                    },
+                    "SecurityGroupIds": {
+                      "type": "StringList",
+                      "description": "(Optional) A comma separated list of security group IDs with the required Inbound and Outbound connectivity rules.",
+                      "default": [
+                        "{{ssm:/amiPatching/config/securityGroupId}}"
+                      ]
+                    },
+                    "SubnetId": {
+                      "type": "String",
+                      "description": "(Optional) Specify the SubnetId if you want to launch EC2 instance in a specific subnet.",
+                      "default": "{{ssm:/amiPatching/config/subnetId}}"
+                    }
+                  },
+                  "mainSteps": [
+                    {
+                      "name": "launchInstance",
+                      "action": "aws:runInstances",
+                      "maxAttempts": 3,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "ImageId": "{{SourceAmiId}}",
+                        "InstanceType": "{{InstanceType}}",
+                        "UserData": "IyEvYmluL2Jhc2gKCmZ1bmN0aW9uIGdldF9jb250ZW50cygpIHsKICAgIGlmIFsgLXggIiQod2hpY2ggY3VybCkiIF07IHRoZW4KICAgICAgICBjdXJsIC1zIC1mICIkMSIKICAgIGVsaWYgWyAteCAiJCh3aGljaCB3Z2V0KSIgXTsgdGhlbgogICAgICAgIHdnZXQgIiQxIiAtTyAtCiAgICBlbHNlCiAgICAgICAgZGllICJObyBkb3dubG9hZCB1dGlsaXR5IChjdXJsLCB3Z2V0KSIKICAgIGZpCn0KCnJlYWRvbmx5IFRPS0VOX1VSTD0iaHR0cDovLzE2OS4yNTQuMTY5LjI1NC9sYXRlc3QvYXBpL3Rva2VuIgpmdW5jdGlvbiBnZXRfY29udGVudHNfSU1EU3YyKCkgewogICAgaWYgWyAteCAiJCh3aGljaCBjdXJsKSIgXTsgdGhlbgogICAgICAgIHJlYWRvbmx5IFRPS0VOPSQoY3VybCAtcyAtZiAtWCBQVVQgLUggIlgtYXdzLWVjMi1tZXRhZGF0YS10b2tlbi10dGwtc2Vjb25kczogMjE2MDAiICIkVE9LRU5fVVJMIikKICAgICAgICBjdXJsIC1zIC1mIC1IICJYLWF3cy1lYzItbWV0YWRhdGEtdG9rZW46ICRUT0tFTiIgIiQxIgogICAgZWxpZiBbIC14ICIkKHdoaWNoIHdnZXQpIiBdOyB0aGVuCiAgICAgICAgIyB3Z2V0IGRvZXNuJ3Qgc3VwcG9ydCAtLW1ldGhvZCBmbGFnIGluIG1hbnkgY2FzZXMsIHNvIGZhbGwgYmFjayBvbiBJTURTdjEKICAgICAgICB3Z2V0ICIkMSIgLU8gLQogICAgZWxzZQogICAgICAgIGRpZSAiTm8gZG93bmxvYWQgdXRpbGl0eSAoY3VybCwgd2dldCkiCiAgICBmaQp9CgpyZWFkb25seSBJREVOVElUWV9VUkw9Imh0dHA6Ly8xNjkuMjU0LjE2OS4yNTQvMjAxNi0wNi0zMC9keW5hbWljL2luc3RhbmNlLWlkZW50aXR5L2RvY3VtZW50LyIKcmVhZG9ubHkgVFJVRV9SRUdJT049JChnZXRfY29udGVudHNfSU1EU3YyICIkSURFTlRJVFlfVVJMIiB8IGF3ayAtRlwiICcvcmVnaW9uLyB7IHByaW50ICQ0IH0nKQpyZWFkb25seSBERUZBVUxUX1JFR0lPTj0idXMtZWFzdC0xIgpyZWFkb25seSBSRUdJT049IiR7VFJVRV9SRUdJT046LSRERUZBVUxUX1JFR0lPTn0iCgpmdW5jdGlvbiBkaWUoKSB7CiAgICBlY2hvICIkQCwgZXhpdGluZy4iID4mMgogICAgZXhpdCAxCn0KCmZ1bmN0aW9uIGlzc3VlX21hdGNoKCkgewogICAgZ3JlcCAtRSAtaSAtYyAiJDEiIC9ldGMvaXNzdWUgMj4mMSAmPi9kZXYvbnVsbAogICAgWyAkPyAtZXEgMCBdICYmIGVjaG8gInRydWUiIHx8IGVjaG8gImZhbHNlIgp9CgpmdW5jdGlvbiBpc19kZWJ1bnR1KCkgewogICAgZWNobyAiJChpc3N1ZV9tYXRjaCAnRGViaWFufFVidW50dScpIgp9CgpmdW5jdGlvbiBpc19yZWRoYXQoKSB7CiAgICBpZiBbIC1mICIvZXRjL3N5c3RlbS1yZWxlYXNlIiBdIHx8CiAgICAgICAgWyAtZiAiL2V0Yy9yZWRoYXQtcmVsZWFzZSIgXTsgdGhlbgogICAgICAgIGVjaG8gInRydWUiCiAgICBlbHNlCiAgICAgICAgZWNobyAiZmFsc2UiCiAgICBmaQp9CgpmdW5jdGlvbiBpc19zdXNlKCkgewogICAgaWYgWyAtZiAiL2V0Yy9vcy1yZWxlYXNlIiBdOyB0aGVuCiAgICAgICAgeD0kKGdyZXAgLUUgLWkgLWMgInN1c2UiIC9ldGMvb3MtcmVsZWFzZSAyPi9kZXYvbnVsbCkKICAgICAgICBpZiBbICR4IC1ndCAwIF07IHRoZW4KICAgICAgICAgICAgZWNobyAidHJ1ZSIKICAgICAgICBlbHNlCiAgICAgICAgICAgIGVjaG8gImZhbHNlIgogICAgICAgIGZpCiAgICBlbHNlCiAgICAgICAgZWNobyAiZmFsc2UiCiAgICBmaQp9CgpmdW5jdGlvbiBnZXRfYXJjaCgpIHsKICAgIGlmIFsgIiQodW5hbWUgLW0pIiA9PSAieDg2XzY0IiBdOyB0aGVuCiAgICAgICAgZWNobyAiYW1kNjQiCiAgICBlbGlmIFtbICIkKHVuYW1lIC1tKSIgPX4gaVszLTZdODYgXV07IHRoZW4KICAgICAgICBlY2hvICIzODYiCiAgICBlbHNlCiAgICAgICAgZGllICJVbnN1cHBvcnRlZCBhcmNoaXRlY3R1cmUgJCh1bmFtZSAtbSkiCiAgICBmaQp9CgpmdW5jdGlvbiBnZXRfcGFja2FnZV90eXBlKCkgewogICAgaWYgWyAiJChpc19kZWJ1bnR1KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJkZWIiCiAgICBlbGlmIFsgIiQoaXNfcmVkaGF0KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJycG0iCiAgICBlbGlmIFsgIiQoaXNfc3VzZSkiID09ICJ0cnVlIiBdOyB0aGVuCiAgICAgICAgZWNobyAicnBtIgogICAgZmkKfQoKCmZ1bmN0aW9uIGdldF9kaXN0KCkgewogICAgaWYgWyAiJChpc19kZWJ1bnR1KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJkZWJpYW4iCiAgICBlbGlmIFsgIiQoaXNfcmVkaGF0KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJsaW51eCIKICAgIGVsaWYgW1sgIiQoaXNfc3VzZSkiID09ICJ0cnVlIiBdXTsgdGhlbgogICAgICAgIGVjaG8gImxpbnV4IgogICAgZWxzZQogICAgICAgIGRpZSAiVW5rbm93biBkaXN0cmlidXRpb24iCiAgICBmaQp9CgpmdW5jdGlvbiBnZXRfc3NtX2FnZW50KCkgewogICAgZWNobyAiRmV0Y2hpbmcgU1NNIEFnZW50Li4uIgogICAgZXh0ZW5zaW9uPSIkKGdldF9wYWNrYWdlX3R5cGUpIgogICAgZGlzdD0iJChnZXRfZGlzdCkiCiAgICBhcmNoPSIkKGdldF9hcmNoKSIKCiAgICBwYWNrYWdlPSJhbWF6b24tc3NtLWFnZW50LiRleHRlbnNpb24iCiAgICB1cmxfYmFzZT0iaHR0cHM6Ly9hbWF6b24tc3NtLSRSRUdJT04uczMuYW1hem9uYXdzLmNvbSIKICAgIHVybD0iJHt1cmxfYmFzZX0vbGF0ZXN0LyR7ZGlzdH1fJHthcmNofS8ke3BhY2thZ2V9IgogICAgRklMRV9TSVpFPTAKCiAgICB3aGlsZSBbICRSRVRSWV9DT1VOVCAtbHQgJE1BWF9SRVRSWV9DT1VOVCBdIDsgZG8KICAgICAgZ2V0X2NvbnRlbnRzICIkdXJsIiA+ICIkcGFja2FnZSIKCiAgICAgIGlmIFsgLWYgIiRwYWNrYWdlIiBdOyB0aGVuCiAgICAgICAgRklMRV9TSVpFPSQoZHUgLWsgJHBhY2thZ2UgfCBjdXQgLWYxKQogICAgICAgIGlmIFsgJEZJTEVfU0laRSAtZ3QgMCBdOyB0aGVuCiAgICAgICAgICBicmVhawogICAgICAgIGZpCiAgICAgIGZpCiAgICAgIFJFVFJZX0NPVU5UPSQoKFJFVFJZX0NPVU5UKzEpKTsKICAgICAgZWNobyBBd3MtSW5zdGFsbC1Tc20tQWdlbnQ6IFJldHJ5aW5nIGRvd25sb2FkIHJldHJ5Q291bnQ6ICRSRVRSWV9DT1VOVCwgZmlsZVNpemU6ICRGSUxFX1NJWkUgdXJsOiR1cmwgcGFja2FnZTokcGFja2FnZQogICAgZG9uZQoKICAgIGlmIFsgISAtZiAiJHBhY2thZ2UiIF0gfHwgWyAkRklMRV9TSVpFIC1lcSAwIF07IHRoZW4KICAgICAgICBkaWUgIkNvdWxkIG5vdCBkb3dubG9hZCB0aGUgcGFja2FnZSBmcm9tICR1cmwgYWZ0ZXIgJFJFVFJZX0NPVU5UIHJldHJpZXMiCiAgICBmaQp9CgpmdW5jdGlvbiBzdGFydF9zc21fYWdlbnQoKSB7CiAgICBlY2hvICJTdGFydGluZyBTU00gQWdlbnQuLi4iCiAgICBpZiBbIC14ICIkKHdoaWNoIHN5c3RlbWN0bCkiIF07IHRoZW4KICAgICAgICAgIHN5c3RlbWN0bCBzdGFydCBhbWF6b24tc3NtLWFnZW50CiAgICBlbGlmIFsgLXggIiQod2hpY2ggc3RhcnQpIiBdOyB0aGVuCiAgICAgICAgICBzdGFydCBhbWF6b24tc3NtLWFnZW50CiAgICBlbHNlCiAgICAgICAgICBlY2hvICJDb3VsZCBub3QgZmluZCBjb21tYW5kIHRvIHN0YXJ0IFNTTSBBZ2VudC4gU2tpcHBpbmcgQWdlbnQgc3RhcnQuIgogICAgZmkKfQoKZnVuY3Rpb24gaW5zdGFsbF9zc21fYWdlbnQoKSB7CiAgICBlY2hvICJJbnN0YWxsaW5nIFNTTSBBZ2VudC4uLiIKICAgIHdoaWxlIFsgJFJFVFJZX0NPVU5UIC1sdCAkTUFYX1JFVFJZX0NPVU5UIF0gOyBkbwogICAgICBpZiBbICIkKGlzX2RlYnVudHUpIiA9PSAidHJ1ZSIgXTsgdGhlbgogICAgICAgICMgSWYgYW4gZXhpc3RpbmcgdmVyc2lvbiBpcyBpbnN0YWxsZWQgd2l0aCBzbmFwLCBpdCB3aWxsIGJsb2NrIHVwZ3JhZGUuCiAgICAgICAgc25hcCByZW1vdmUgYW1hem9uLXNzbS1hZ2VudAogICAgICAgIGRwa2cgLWkgYW1hem9uLXNzbS1hZ2VudC5kZWIKICAgICAgZWxpZiBbICIkKGlzX3JlZGhhdCkiID09ICJ0cnVlIiBdOyB0aGVuCiAgICAgICAgeXVtIGluc3RhbGwgLS1ub2dwZ2NoZWNrIC15IGFtYXpvbi1zc20tYWdlbnQucnBtCiAgICAgIGVsaWYgWyAiJChpc19zdXNlKSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBycG0gLS1pbnN0YWxsIGFtYXpvbi1zc20tYWdlbnQucnBtCiAgICAgIGVsc2UKICAgICAgICBkaWUgIlVua25vd24gZGlzdHJpYnV0aW9uIgogICAgICBmaQoKICAgICAgaWYgWyAteCAiJCh3aGljaCBhbWF6b24tc3NtLWFnZW50KSIgXTsgdGhlbgogICAgICAgIGJyZWFrCiAgICAgIGZpCiAgICAgIFJFVFJZX0NPVU5UPSQoKFJFVFJZX0NPVU5UKzEpKTsKICAgICAgZWNobyBBd3MtSW5zdGFsbC1Tc20tQWdlbnQ6IFJldHJ5aW5nIGluc3RhbGxhdGlvbiByZXRyeUNvdW50OiAkUkVUUllfQ09VTlQKICAgIGRvbmUKCiAgICBpZiBbICEgLXggIiQod2hpY2ggYW1hem9uLXNzbS1hZ2VudCkiIF07IHRoZW4KICAgICAgZGllICJObyBTU00gYWdlbnQgd2FzIGluc3RhbGxlZCIKICAgIGZpCn0KCmZ1bmN0aW9uIG1haW4oKSB7CiAgICBNQVhfUkVUUllfQ09VTlQ9MwogICAgUkVUUllfQ09VTlQ9MAoKICAgIGNkIC90bXAKCiAgICB3aGlsZSBbICRSRVRSWV9DT1VOVCAtbHQgJE1BWF9SRVRSWV9DT1VOVCBdIDsgZG8KICAgICAgZ2V0X3NzbV9hZ2VudAogICAgICBpbnN0YWxsX3NzbV9hZ2VudAoKICAgICAgaWYgWyAhIC14ICIkKHdoaWNoIGFtYXpvbi1zc20tYWdlbnQpIiBdOyB0aGVuCiAgICAgICAgUkVUUllfQ09VTlQ9JCgoUkVUUllfQ09VTlQrMSkpOwogICAgICAgIGVjaG8gU1NNQWdlbnQgSW5zdGFsbGF0aW9uIGZhaWxlZCAkUkVUUllfQ09VTlQgdGltZXMsIHJldHJ5aW5nLi4uCiAgICAgICAgY29udGludWUKICAgICAgZWxzZQogICAgICAgIHN0YXJ0X3NzbV9hZ2VudAogICAgICAgIGV4aXQgMAogICAgICBmaQoKICAgIGRvbmUKfQoKbWFpbiAkQCAyPiYxIHwgdGVlIC90bXAvYXdzLWluc3RhbGwtc3NtLWFnZW50LmxvZwo=",
+                        "MinInstanceCount": 1,
+                        "MaxInstanceCount": 1,
+                        "IamInstanceProfileName": "{{IamInstanceProfileName}}",
+                        "SubnetId": "{{ SubnetId }}",
+                        "SecurityGroupIds": "{{SecurityGroupIds}}"
+                      }
+                    },
+                    {
+                      "name": "verifySsmInstall",
+                      "action": "aws:runCommand",
+                      "maxAttempts": 3,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "DocumentName": "AWS-RunShellScript",
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "Parameters": {
+                          "commands": [
+                            "hostname"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "generatePatchReport",
+                      "action": "aws:runCommand",
+                      "maxAttempts": 1,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "DocumentName": "AWS-RunShellScript",
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "Parameters": {
+                          "commands": [
+                            "echo \\\"timestamp\\\",\\\"package name\\\",\\\"current version\\\",\\\"update version\\\" > tomcatScanForPatchesResults.csv",
+                            "yum -q check-update | tr -s \" \" | while read PNAME UVERSION extra",
+                            "do",
+                            "if [ \"${PNAME}x\" != \"x\" ]; then",
+                            "TIMESTAMP=$( date +%D\" \"%r )",
+                            "echo \\\"$TIMESTAMP\\\",$(rpm -q \"${PNAME}\" --qf '\"%{NAME}\",\"%{VERSION}\",\"')${UVERSION}\\\" >> tomcatScanForPatchesResults.csv",
+                            "fi",
+                            "done",
+                            "",
+                            "cat tomcatScanForPatchesResults.csv",
+                            "",
+                            "aws s3 cp tomcatScanForPatchesResults.csv s3://697875012230-opti-ami-patching-templates-and-reports/patch-scan-reports/tomcat/"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "stopInstance",
+                      "action": "aws:changeInstanceState",
+                      "maxAttempts": 3,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "DesiredState": "stopped"
+                      }
+                    },
+                    {
+                      "name": "terminateInstance",
+                      "action": "aws:changeInstanceState",
+                      "maxAttempts": 3,
+                      "onFailure": "Continue",
+                      "inputs": {
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "DesiredState": "terminated"
+                      }
+                    }
+                  ]
+                },
+                "documentType": "Automation",
+                "name": "tomcatScanForPatches"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnDocument",
+              "version": "2.34.2"
+            }
+          },
+          "apacheScanForPatchesDocument": {
+            "id": "apacheScanForPatchesDocument",
+            "path": "AmiPatchingComplianceStack/apacheScanForPatchesDocument",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::Document",
+              "aws:cdk:cloudformation:props": {
+                "content": {
+                  "schemaVersion": "0.3",
+                  "description": "Updates AMI with Linux distribution packages and Amazon software. For details,see https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-awsdocs-linux.html",
+                  "assumeRole": "{{AutomationAssumeRole}}",
+                  "parameters": {
+                    "SourceAmiId": {
+                      "type": "String",
+                      "default": "{{ssm:/amiPatching/apache/apacheAmiId}}",
+                      "description": "(Required) The source Amazon Machine Image ID."
+                    },
+                    "IamInstanceProfileName": {
+                      "type": "String",
+                      "description": "(Required) The instance profile that enables Systems Manager (SSM) to manage the instance.",
+                      "default": "{{ssm:/amiPatching/config/ec2InstanceProfileRole}}"
+                    },
+                    "AutomationAssumeRole": {
+                      "type": "String",
+                      "description": "(Required) The ARN of the role that allows Automation to perform the actions on your behalf.",
+                      "default": "arn:aws:iam::{{global:ACCOUNT_ID}}:role/ssmAutomationDocumentExecutionRole"
+                    },
+                    "InstanceType": {
+                      "type": "String",
+                      "description": "(Optional) Type of instance to launch as the workspace host. Instance types vary by region. Default is t3.micro.",
+                      "default": "t3.micro"
+                    },
+                    "SecurityGroupIds": {
+                      "type": "StringList",
+                      "description": "(Optional) A comma separated list of security group IDs with the required Inbound and Outbound connectivity rules.",
+                      "default": [
+                        "{{ssm:/amiPatching/config/securityGroupId}}"
+                      ]
+                    },
+                    "SubnetId": {
+                      "type": "String",
+                      "description": "(Optional) Specify the SubnetId if you want to launch EC2 instance in a specific subnet.",
+                      "default": "{{ssm:/amiPatching/config/subnetId}}"
+                    }
+                  },
+                  "mainSteps": [
+                    {
+                      "name": "launchInstance",
+                      "action": "aws:runInstances",
+                      "maxAttempts": 3,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "ImageId": "{{SourceAmiId}}",
+                        "InstanceType": "{{InstanceType}}",
+                        "UserData": "IyEvYmluL2Jhc2gKCmZ1bmN0aW9uIGdldF9jb250ZW50cygpIHsKICAgIGlmIFsgLXggIiQod2hpY2ggY3VybCkiIF07IHRoZW4KICAgICAgICBjdXJsIC1zIC1mICIkMSIKICAgIGVsaWYgWyAteCAiJCh3aGljaCB3Z2V0KSIgXTsgdGhlbgogICAgICAgIHdnZXQgIiQxIiAtTyAtCiAgICBlbHNlCiAgICAgICAgZGllICJObyBkb3dubG9hZCB1dGlsaXR5IChjdXJsLCB3Z2V0KSIKICAgIGZpCn0KCnJlYWRvbmx5IFRPS0VOX1VSTD0iaHR0cDovLzE2OS4yNTQuMTY5LjI1NC9sYXRlc3QvYXBpL3Rva2VuIgpmdW5jdGlvbiBnZXRfY29udGVudHNfSU1EU3YyKCkgewogICAgaWYgWyAteCAiJCh3aGljaCBjdXJsKSIgXTsgdGhlbgogICAgICAgIHJlYWRvbmx5IFRPS0VOPSQoY3VybCAtcyAtZiAtWCBQVVQgLUggIlgtYXdzLWVjMi1tZXRhZGF0YS10b2tlbi10dGwtc2Vjb25kczogMjE2MDAiICIkVE9LRU5fVVJMIikKICAgICAgICBjdXJsIC1zIC1mIC1IICJYLWF3cy1lYzItbWV0YWRhdGEtdG9rZW46ICRUT0tFTiIgIiQxIgogICAgZWxpZiBbIC14ICIkKHdoaWNoIHdnZXQpIiBdOyB0aGVuCiAgICAgICAgIyB3Z2V0IGRvZXNuJ3Qgc3VwcG9ydCAtLW1ldGhvZCBmbGFnIGluIG1hbnkgY2FzZXMsIHNvIGZhbGwgYmFjayBvbiBJTURTdjEKICAgICAgICB3Z2V0ICIkMSIgLU8gLQogICAgZWxzZQogICAgICAgIGRpZSAiTm8gZG93bmxvYWQgdXRpbGl0eSAoY3VybCwgd2dldCkiCiAgICBmaQp9CgpyZWFkb25seSBJREVOVElUWV9VUkw9Imh0dHA6Ly8xNjkuMjU0LjE2OS4yNTQvMjAxNi0wNi0zMC9keW5hbWljL2luc3RhbmNlLWlkZW50aXR5L2RvY3VtZW50LyIKcmVhZG9ubHkgVFJVRV9SRUdJT049JChnZXRfY29udGVudHNfSU1EU3YyICIkSURFTlRJVFlfVVJMIiB8IGF3ayAtRlwiICcvcmVnaW9uLyB7IHByaW50ICQ0IH0nKQpyZWFkb25seSBERUZBVUxUX1JFR0lPTj0idXMtZWFzdC0xIgpyZWFkb25seSBSRUdJT049IiR7VFJVRV9SRUdJT046LSRERUZBVUxUX1JFR0lPTn0iCgpmdW5jdGlvbiBkaWUoKSB7CiAgICBlY2hvICIkQCwgZXhpdGluZy4iID4mMgogICAgZXhpdCAxCn0KCmZ1bmN0aW9uIGlzc3VlX21hdGNoKCkgewogICAgZ3JlcCAtRSAtaSAtYyAiJDEiIC9ldGMvaXNzdWUgMj4mMSAmPi9kZXYvbnVsbAogICAgWyAkPyAtZXEgMCBdICYmIGVjaG8gInRydWUiIHx8IGVjaG8gImZhbHNlIgp9CgpmdW5jdGlvbiBpc19kZWJ1bnR1KCkgewogICAgZWNobyAiJChpc3N1ZV9tYXRjaCAnRGViaWFufFVidW50dScpIgp9CgpmdW5jdGlvbiBpc19yZWRoYXQoKSB7CiAgICBpZiBbIC1mICIvZXRjL3N5c3RlbS1yZWxlYXNlIiBdIHx8CiAgICAgICAgWyAtZiAiL2V0Yy9yZWRoYXQtcmVsZWFzZSIgXTsgdGhlbgogICAgICAgIGVjaG8gInRydWUiCiAgICBlbHNlCiAgICAgICAgZWNobyAiZmFsc2UiCiAgICBmaQp9CgpmdW5jdGlvbiBpc19zdXNlKCkgewogICAgaWYgWyAtZiAiL2V0Yy9vcy1yZWxlYXNlIiBdOyB0aGVuCiAgICAgICAgeD0kKGdyZXAgLUUgLWkgLWMgInN1c2UiIC9ldGMvb3MtcmVsZWFzZSAyPi9kZXYvbnVsbCkKICAgICAgICBpZiBbICR4IC1ndCAwIF07IHRoZW4KICAgICAgICAgICAgZWNobyAidHJ1ZSIKICAgICAgICBlbHNlCiAgICAgICAgICAgIGVjaG8gImZhbHNlIgogICAgICAgIGZpCiAgICBlbHNlCiAgICAgICAgZWNobyAiZmFsc2UiCiAgICBmaQp9CgpmdW5jdGlvbiBnZXRfYXJjaCgpIHsKICAgIGlmIFsgIiQodW5hbWUgLW0pIiA9PSAieDg2XzY0IiBdOyB0aGVuCiAgICAgICAgZWNobyAiYW1kNjQiCiAgICBlbGlmIFtbICIkKHVuYW1lIC1tKSIgPX4gaVszLTZdODYgXV07IHRoZW4KICAgICAgICBlY2hvICIzODYiCiAgICBlbHNlCiAgICAgICAgZGllICJVbnN1cHBvcnRlZCBhcmNoaXRlY3R1cmUgJCh1bmFtZSAtbSkiCiAgICBmaQp9CgpmdW5jdGlvbiBnZXRfcGFja2FnZV90eXBlKCkgewogICAgaWYgWyAiJChpc19kZWJ1bnR1KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJkZWIiCiAgICBlbGlmIFsgIiQoaXNfcmVkaGF0KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJycG0iCiAgICBlbGlmIFsgIiQoaXNfc3VzZSkiID09ICJ0cnVlIiBdOyB0aGVuCiAgICAgICAgZWNobyAicnBtIgogICAgZmkKfQoKCmZ1bmN0aW9uIGdldF9kaXN0KCkgewogICAgaWYgWyAiJChpc19kZWJ1bnR1KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJkZWJpYW4iCiAgICBlbGlmIFsgIiQoaXNfcmVkaGF0KSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBlY2hvICJsaW51eCIKICAgIGVsaWYgW1sgIiQoaXNfc3VzZSkiID09ICJ0cnVlIiBdXTsgdGhlbgogICAgICAgIGVjaG8gImxpbnV4IgogICAgZWxzZQogICAgICAgIGRpZSAiVW5rbm93biBkaXN0cmlidXRpb24iCiAgICBmaQp9CgpmdW5jdGlvbiBnZXRfc3NtX2FnZW50KCkgewogICAgZWNobyAiRmV0Y2hpbmcgU1NNIEFnZW50Li4uIgogICAgZXh0ZW5zaW9uPSIkKGdldF9wYWNrYWdlX3R5cGUpIgogICAgZGlzdD0iJChnZXRfZGlzdCkiCiAgICBhcmNoPSIkKGdldF9hcmNoKSIKCiAgICBwYWNrYWdlPSJhbWF6b24tc3NtLWFnZW50LiRleHRlbnNpb24iCiAgICB1cmxfYmFzZT0iaHR0cHM6Ly9hbWF6b24tc3NtLSRSRUdJT04uczMuYW1hem9uYXdzLmNvbSIKICAgIHVybD0iJHt1cmxfYmFzZX0vbGF0ZXN0LyR7ZGlzdH1fJHthcmNofS8ke3BhY2thZ2V9IgogICAgRklMRV9TSVpFPTAKCiAgICB3aGlsZSBbICRSRVRSWV9DT1VOVCAtbHQgJE1BWF9SRVRSWV9DT1VOVCBdIDsgZG8KICAgICAgZ2V0X2NvbnRlbnRzICIkdXJsIiA+ICIkcGFja2FnZSIKCiAgICAgIGlmIFsgLWYgIiRwYWNrYWdlIiBdOyB0aGVuCiAgICAgICAgRklMRV9TSVpFPSQoZHUgLWsgJHBhY2thZ2UgfCBjdXQgLWYxKQogICAgICAgIGlmIFsgJEZJTEVfU0laRSAtZ3QgMCBdOyB0aGVuCiAgICAgICAgICBicmVhawogICAgICAgIGZpCiAgICAgIGZpCiAgICAgIFJFVFJZX0NPVU5UPSQoKFJFVFJZX0NPVU5UKzEpKTsKICAgICAgZWNobyBBd3MtSW5zdGFsbC1Tc20tQWdlbnQ6IFJldHJ5aW5nIGRvd25sb2FkIHJldHJ5Q291bnQ6ICRSRVRSWV9DT1VOVCwgZmlsZVNpemU6ICRGSUxFX1NJWkUgdXJsOiR1cmwgcGFja2FnZTokcGFja2FnZQogICAgZG9uZQoKICAgIGlmIFsgISAtZiAiJHBhY2thZ2UiIF0gfHwgWyAkRklMRV9TSVpFIC1lcSAwIF07IHRoZW4KICAgICAgICBkaWUgIkNvdWxkIG5vdCBkb3dubG9hZCB0aGUgcGFja2FnZSBmcm9tICR1cmwgYWZ0ZXIgJFJFVFJZX0NPVU5UIHJldHJpZXMiCiAgICBmaQp9CgpmdW5jdGlvbiBzdGFydF9zc21fYWdlbnQoKSB7CiAgICBlY2hvICJTdGFydGluZyBTU00gQWdlbnQuLi4iCiAgICBpZiBbIC14ICIkKHdoaWNoIHN5c3RlbWN0bCkiIF07IHRoZW4KICAgICAgICAgIHN5c3RlbWN0bCBzdGFydCBhbWF6b24tc3NtLWFnZW50CiAgICBlbGlmIFsgLXggIiQod2hpY2ggc3RhcnQpIiBdOyB0aGVuCiAgICAgICAgICBzdGFydCBhbWF6b24tc3NtLWFnZW50CiAgICBlbHNlCiAgICAgICAgICBlY2hvICJDb3VsZCBub3QgZmluZCBjb21tYW5kIHRvIHN0YXJ0IFNTTSBBZ2VudC4gU2tpcHBpbmcgQWdlbnQgc3RhcnQuIgogICAgZmkKfQoKZnVuY3Rpb24gaW5zdGFsbF9zc21fYWdlbnQoKSB7CiAgICBlY2hvICJJbnN0YWxsaW5nIFNTTSBBZ2VudC4uLiIKICAgIHdoaWxlIFsgJFJFVFJZX0NPVU5UIC1sdCAkTUFYX1JFVFJZX0NPVU5UIF0gOyBkbwogICAgICBpZiBbICIkKGlzX2RlYnVudHUpIiA9PSAidHJ1ZSIgXTsgdGhlbgogICAgICAgICMgSWYgYW4gZXhpc3RpbmcgdmVyc2lvbiBpcyBpbnN0YWxsZWQgd2l0aCBzbmFwLCBpdCB3aWxsIGJsb2NrIHVwZ3JhZGUuCiAgICAgICAgc25hcCByZW1vdmUgYW1hem9uLXNzbS1hZ2VudAogICAgICAgIGRwa2cgLWkgYW1hem9uLXNzbS1hZ2VudC5kZWIKICAgICAgZWxpZiBbICIkKGlzX3JlZGhhdCkiID09ICJ0cnVlIiBdOyB0aGVuCiAgICAgICAgeXVtIGluc3RhbGwgLS1ub2dwZ2NoZWNrIC15IGFtYXpvbi1zc20tYWdlbnQucnBtCiAgICAgIGVsaWYgWyAiJChpc19zdXNlKSIgPT0gInRydWUiIF07IHRoZW4KICAgICAgICBycG0gLS1pbnN0YWxsIGFtYXpvbi1zc20tYWdlbnQucnBtCiAgICAgIGVsc2UKICAgICAgICBkaWUgIlVua25vd24gZGlzdHJpYnV0aW9uIgogICAgICBmaQoKICAgICAgaWYgWyAteCAiJCh3aGljaCBhbWF6b24tc3NtLWFnZW50KSIgXTsgdGhlbgogICAgICAgIGJyZWFrCiAgICAgIGZpCiAgICAgIFJFVFJZX0NPVU5UPSQoKFJFVFJZX0NPVU5UKzEpKTsKICAgICAgZWNobyBBd3MtSW5zdGFsbC1Tc20tQWdlbnQ6IFJldHJ5aW5nIGluc3RhbGxhdGlvbiByZXRyeUNvdW50OiAkUkVUUllfQ09VTlQKICAgIGRvbmUKCiAgICBpZiBbICEgLXggIiQod2hpY2ggYW1hem9uLXNzbS1hZ2VudCkiIF07IHRoZW4KICAgICAgZGllICJObyBTU00gYWdlbnQgd2FzIGluc3RhbGxlZCIKICAgIGZpCn0KCmZ1bmN0aW9uIG1haW4oKSB7CiAgICBNQVhfUkVUUllfQ09VTlQ9MwogICAgUkVUUllfQ09VTlQ9MAoKICAgIGNkIC90bXAKCiAgICB3aGlsZSBbICRSRVRSWV9DT1VOVCAtbHQgJE1BWF9SRVRSWV9DT1VOVCBdIDsgZG8KICAgICAgZ2V0X3NzbV9hZ2VudAogICAgICBpbnN0YWxsX3NzbV9hZ2VudAoKICAgICAgaWYgWyAhIC14ICIkKHdoaWNoIGFtYXpvbi1zc20tYWdlbnQpIiBdOyB0aGVuCiAgICAgICAgUkVUUllfQ09VTlQ9JCgoUkVUUllfQ09VTlQrMSkpOwogICAgICAgIGVjaG8gU1NNQWdlbnQgSW5zdGFsbGF0aW9uIGZhaWxlZCAkUkVUUllfQ09VTlQgdGltZXMsIHJldHJ5aW5nLi4uCiAgICAgICAgY29udGludWUKICAgICAgZWxzZQogICAgICAgIHN0YXJ0X3NzbV9hZ2VudAogICAgICAgIGV4aXQgMAogICAgICBmaQoKICAgIGRvbmUKfQoKbWFpbiAkQCAyPiYxIHwgdGVlIC90bXAvYXdzLWluc3RhbGwtc3NtLWFnZW50LmxvZwo=",
+                        "MinInstanceCount": 1,
+                        "MaxInstanceCount": 1,
+                        "IamInstanceProfileName": "{{IamInstanceProfileName}}",
+                        "SubnetId": "{{ SubnetId }}",
+                        "SecurityGroupIds": "{{SecurityGroupIds}}"
+                      }
+                    },
+                    {
+                      "name": "verifySsmInstall",
+                      "action": "aws:runCommand",
+                      "maxAttempts": 3,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "DocumentName": "AWS-RunShellScript",
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "Parameters": {
+                          "commands": [
+                            "hostname"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "generatePatchReport",
+                      "action": "aws:runCommand",
+                      "maxAttempts": 1,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "DocumentName": "AWS-RunShellScript",
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "Parameters": {
+                          "commands": [
+                            "echo \\\"timestamp\\\",\\\"package name\\\",\\\"current version\\\",\\\"update version\\\" > apacheScanForPatchesResults.csv",
+                            "yum -q check-update | tr -s \" \" | while read PNAME UVERSION extra",
+                            "do",
+                            "if [ \"${PNAME}x\" != \"x\" ]; then",
+                            "TIMESTAMP=$( date +%D\" \"%r )",
+                            "echo \\\"$TIMESTAMP\\\",$(rpm -q \"${PNAME}\" --qf '\"%{NAME}\",\"%{VERSION}\",\"')${UVERSION}\\\" >> apacheScanForPatchesResults.csv",
+                            "fi",
+                            "done",
+                            "",
+                            "cat apacheScanForPatchesResults.csv",
+                            "",
+                            "aws s3 cp apacheScanForPatchesResults.csv s3://697875012230-opti-ami-patching-templates-and-reports/patch-scan-reports/apache/"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "name": "stopInstance",
+                      "action": "aws:changeInstanceState",
+                      "maxAttempts": 3,
+                      "timeoutSeconds": 1200,
+                      "onFailure": "Abort",
+                      "inputs": {
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "DesiredState": "stopped"
+                      }
+                    },
+                    {
+                      "name": "terminateInstance",
+                      "action": "aws:changeInstanceState",
+                      "maxAttempts": 3,
+                      "onFailure": "Continue",
+                      "inputs": {
+                        "InstanceIds": [
+                          "{{launchInstance.InstanceIds}}"
+                        ],
+                        "DesiredState": "terminated"
+                      }
+                    }
+                  ]
+                },
+                "documentType": "Automation",
+                "name": "apacheScanForPatches"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnDocument",
+              "version": "2.34.2"
+            }
+          },
+          "scanForPatchesMaintenanceWindow": {
+            "id": "scanForPatchesMaintenanceWindow",
+            "path": "AmiPatchingComplianceStack/scanForPatchesMaintenanceWindow",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::MaintenanceWindow",
+              "aws:cdk:cloudformation:props": {
+                "allowUnassociatedTargets": false,
+                "cutoff": 0,
+                "duration": 2,
+                "name": "scanAmisForPatches",
+                "schedule": "cron(0 30 20 ? * * *)",
+                "description": "Maintenance Window that launches an apache and tomcat instance, scans for patches, and generates a report uploaded to s3"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnMaintenanceWindow",
+              "version": "2.34.2"
+            }
+          },
+          "SsmParameterValue:--amiPatching--config--automationDocumentExecutionIamRoleArn:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": {
+            "id": "SsmParameterValue:--amiPatching--config--automationDocumentExecutionIamRoleArn:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter",
+            "path": "AmiPatchingComplianceStack/SsmParameterValue:--amiPatching--config--automationDocumentExecutionIamRoleArn:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.34.2"
+            }
+          },
+          "SsmParameterValue:--amiPatching--config--automationDocumentExecutionIamRoleArn:C96584B6-F00A-464E-AD19-53AFF4B05118": {
+            "id": "SsmParameterValue:--amiPatching--config--automationDocumentExecutionIamRoleArn:C96584B6-F00A-464E-AD19-53AFF4B05118",
+            "path": "AmiPatchingComplianceStack/SsmParameterValue:--amiPatching--config--automationDocumentExecutionIamRoleArn:C96584B6-F00A-464E-AD19-53AFF4B05118",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.34.2"
+            }
+          },
+          "maintenanceWindowTask": {
+            "id": "maintenanceWindowTask",
+            "path": "AmiPatchingComplianceStack/maintenanceWindowTask",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::MaintenanceWindowTask",
+              "aws:cdk:cloudformation:props": {
+                "priority": 1,
+                "taskArn": "executeAmiPatchScanDocuments",
+                "taskType": "AUTOMATION",
+                "windowId": {
+                  "Ref": "scanForPatchesMaintenanceWindow"
+                },
+                "description": "Task that executes parent document to build resources necessary to generate CSV report with missing patches listed.",
+                "serviceRoleArn": {
+                  "Ref": "SsmParameterValueamiPatchingconfigautomationDocumentExecutionIamRoleArnC96584B6F00A464EAD1953AFF4B05118Parameter"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnMaintenanceWindowTask",
+              "version": "2.34.2"
+            }
+          },
+          "deprecatedInstanceScanMaintenanceWindow": {
+            "id": "deprecatedInstanceScanMaintenanceWindow",
+            "path": "AmiPatchingComplianceStack/deprecatedInstanceScanMaintenanceWindow",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::MaintenanceWindow",
+              "aws:cdk:cloudformation:props": {
+                "allowUnassociatedTargets": false,
+                "cutoff": 0,
+                "duration": 2,
+                "name": "scanForDeprecatedInstancesWindow",
+                "schedule": "cron(0 30 00 ? * * *)"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnMaintenanceWindow",
+              "version": "2.34.2"
+            }
+          },
+          "deprecatedInstanceMaintenanceWindowTask": {
+            "id": "deprecatedInstanceMaintenanceWindowTask",
+            "path": "AmiPatchingComplianceStack/deprecatedInstanceMaintenanceWindowTask",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::MaintenanceWindowTask",
+              "aws:cdk:cloudformation:props": {
+                "priority": 1,
+                "taskArn": {
+                  "Fn::GetAtt": [
+                    "buildDeprecatedInstancesLambda787B07A5",
+                    "Arn"
+                  ]
+                },
+                "taskType": "LAMBDA",
+                "windowId": {
+                  "Ref": "deprecatedInstanceScanMaintenanceWindow"
+                },
+                "description": "Generates a report containing all instances not using the latest Tomcat and Apache AMIs located in Parameter Store",
+                "serviceRoleArn": {
+                  "Fn::GetAtt": [
+                    "lambdaExecutionRole957698A4",
+                    "Arn"
+                  ]
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnMaintenanceWindowTask",
+              "version": "2.34.2"
+            }
+          },
+          "removeDeprecatedAmisMaintenanceWindow": {
+            "id": "removeDeprecatedAmisMaintenanceWindow",
+            "path": "AmiPatchingComplianceStack/removeDeprecatedAmisMaintenanceWindow",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::MaintenanceWindow",
+              "aws:cdk:cloudformation:props": {
+                "allowUnassociatedTargets": false,
+                "cutoff": 0,
+                "duration": 2,
+                "name": "removeDeprecatedAmisWindow",
+                "schedule": "cron(0 30 06 ? * * *)"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnMaintenanceWindow",
+              "version": "2.34.2"
+            }
+          },
+          "removeDeprecatedAMIsMaintenanceWindowTask": {
+            "id": "removeDeprecatedAMIsMaintenanceWindowTask",
+            "path": "AmiPatchingComplianceStack/removeDeprecatedAMIsMaintenanceWindowTask",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::SSM::MaintenanceWindowTask",
+              "aws:cdk:cloudformation:props": {
+                "priority": 1,
+                "taskArn": {
+                  "Fn::GetAtt": [
+                    "removeDeprecatedAmisLambdaA0D7D581",
+                    "Arn"
+                  ]
+                },
+                "taskType": "LAMBDA",
+                "windowId": {
+                  "Ref": "removeDeprecatedAmisMaintenanceWindow"
+                },
+                "description": "executes Lambda function to delete AMIs and Snapshots with the amiType:tomcat or amiType:apache and markedForDeletion:true tags",
+                "serviceRoleArn": {
+                  "Fn::GetAtt": [
+                    "lambdaExecutionRole957698A4",
+                    "Arn"
+                  ]
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.CfnMaintenanceWindowTask",
+              "version": "2.34.2"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "AmiPatchingComplianceStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "AmiPatchingComplianceStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.64"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.34.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.34.2"
+    }
+  }
+}
